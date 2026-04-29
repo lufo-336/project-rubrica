@@ -1,0 +1,183 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f0f0f;
+}
+
+/* La scena è il "mondo 3D" — qui si imposta la prospettiva */
+.scena {
+  width: 200px;
+  height: 200px;
+  perspective: 600px;
+}
+
+/* Il cubo è il contenitore delle 6 facce */
+.cubo {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Ogni faccia è posizionata in 3D */
+.faccia {
+.faccia {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-family: sans-serif;
+  font-weight: bold;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);   /* ← quasi trasparente */
+  backdrop-filter: blur(12px);              /* ← effetto vetro smerigliato */
+  -webkit-backdrop-filter: blur(12px);      /* ← per Safari */
+  will-change: transform;
+  backface-visibility: hidden;
+}
+}
+
+/* Posizionamento delle 6 facce nello spazio 3D */
+.fronte   { transform: translateZ(100px); }
+.dietro   { transform: rotateY(180deg) translateZ(100px); }
+.destra   { transform: rotateY(90deg)  translateZ(100px); }
+.sinistra { transform: rotateY(-90deg) translateZ(100px); }
+.sopra    { transform: rotateX(90deg)  translateZ(100px); }
+.sotto    { transform: rotateX(-90deg) translateZ(100px); }
+
+/* Animazione di rotazione continua */
+@keyframes ruota {
+  from { transform: rotateX(-20deg) rotateY(0deg); }
+  to   { transform: rotateX(-20deg) rotateY(360deg); }
+}
+
+.controlli {
+  position: fixed;
+  bottom: 30px;
+  display: flex;
+  gap: 10px;
+}
+
+.controlli button {
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.controlli button:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Sfondo gradiente colorato — il vetro ha bisogno di questo */
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+}
+
+/* Sfere colorate sullo sfondo per rendere il vetro più evidente */
+body::before {
+  content: '';
+  position: fixed;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #7b2ff7, transparent 70%);
+  top: -100px;
+  left: -100px;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #00c6ff, transparent 70%);
+  bottom: -100px;
+  right: -100px;
+  z-index: 0;
+}
+
+.scena {
+  width: 200px;
+  height: 200px;
+  perspective: 600px;
+  position: relative;
+  z-index: 1;  /* sopra le sfere */
+}
+
+.cubo {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Glassmorphism — ispirato a css.glass */
+.faccia {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-family: sans-serif;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+
+  background: rgba(255, 255, 255, 0.12);  /* ← più visibile ma ancora trasparente */
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.5);  /* ← bordo più marcato, dà il bordo "vetro" */
+  box-shadow:
+    0 0 20px rgba(255, 255, 255, 0.05),
+    inset 0 0 20px rgba(255, 255, 255, 0.05);
+
+  will-change: transform;
+  /* backface-visibility: hidden — rimane RIMOSSA */
+}
+
+/* Colore diverso per ogni faccia — leggero tono di colore */
+.fronte   { background: rgba(123, 47, 247, 0.15); transform: translateZ(100px); }
+.dietro   { background: rgba(123, 47, 247, 0.15); transform: rotateY(180deg)  translateZ(100px); }
+.destra   { background: rgba(0, 198, 255, 0.15);  transform: rotateY(90deg)   translateZ(100px); }
+.sinistra { background: rgba(0, 198, 255, 0.15);  transform: rotateY(-90deg)  translateZ(100px); }
+.sopra    { background: rgba(255, 255, 255, 0.12); transform: rotateX(90deg)   translateZ(100px); }
+.sotto    { background: rgba(255, 255, 255, 0.10); transform: rotateX(-90deg)  translateZ(100px); }
+
+/* Posizionamento 3D */
+.fronte   { transform: translateZ(100px); }
+.dietro   { transform: rotateY(180deg)  translateZ(100px); }
+.destra   { transform: rotateY(90deg)   translateZ(100px); }
+.sinistra { transform: rotateY(-90deg)  translateZ(100px); }
+.sopra    { transform: rotateX(90deg)   translateZ(100px); }
+.sotto    { transform: rotateX(-90deg)  translateZ(100px); }
