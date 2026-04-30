@@ -51,12 +51,12 @@ body {
 }
 
 /* Posizionamento delle 6 facce nello spazio 3D */
-.fronte   { transform: translateZ(100px); }
-.dietro   { transform: rotateY(180deg) translateZ(100px); }
-.destra   { transform: rotateY(90deg)  translateZ(100px); }
-.sinistra { transform: rotateY(-90deg) translateZ(100px); }
-.sopra    { transform: rotateX(90deg)  translateZ(100px); }
-.sotto    { transform: rotateX(-90deg) translateZ(100px); }
+.fronte   { background: rgba(123, 47, 247, 0.45); transform: translateZ(100px); }
+.dietro   { background: rgba(123, 47, 247, 0.45); transform: rotateY(180deg) translateZ(100px); }
+.destra   { background: rgba(0, 198, 255, 0.45);  transform: rotateY(90deg) translateZ(100px); }
+.sinistra { background: rgba(0, 198, 255, 0.45);  transform: rotateY(-90deg) translateZ(100px); }
+.sopra    { background: rgba(255,255,255,0.20);    transform: rotateX(90deg) translateZ(100px); }
+.sotto    { background: rgba(255,255,255,0.15);    transform: rotateX(-90deg) translateZ(100px); }
 
 /* Animazione di rotazione continua */
 @keyframes ruota {
@@ -140,7 +140,6 @@ body::after {
   will-change: transform;
 }
 
-/* Glassmorphism — ispirato a css.glass */
 .faccia {
   position: absolute;
   width: 200px;
@@ -154,22 +153,24 @@ body::after {
   color: white;
   text-shadow: 0 1px 4px rgba(0,0,0,0.4);
 
-  background: rgba(255, 255, 255, 0.12);  /* ← più visibile ma ancora trasparente */
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.5);  /* ← bordo più marcato, dà il bordo "vetro" */
+  background: rgba(255, 255, 255, 0.12);
+  /* backdrop-filter rimosso — causa il glitch tra facce */
+  border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow:
     0 0 20px rgba(255, 255, 255, 0.05),
     inset 0 0 20px rgba(255, 255, 255, 0.05);
 
   will-change: transform;
-  /* backface-visibility: hidden — rimane RIMOSSA */
+  backface-visibility: hidden; /* ← va rimessa: nasconde le facce posteriori */
 }
 
 /* Colore diverso per ogni faccia — leggero tono di colore */
 .fronte   { background: rgba(123, 47, 247, 0.15); transform: translateZ(100px); }
 .dietro   { background: rgba(123, 47, 247, 0.15); transform: rotateY(180deg)  translateZ(100px); }
-.destra   { background: rgba(0, 198, 255, 0.15);  transform: rotateY(90deg)   translateZ(100px); }
+.destra { 
+  background: rgba(0, 198, 255, 0.25); 
+  transform: rotateY(90deg) translateZ(100px); 
+}
 .sinistra { background: rgba(0, 198, 255, 0.15);  transform: rotateY(-90deg)  translateZ(100px); }
 .sopra    { background: rgba(255, 255, 255, 0.12); transform: rotateX(90deg)   translateZ(100px); }
 .sotto    { background: rgba(255, 255, 255, 0.10); transform: rotateX(-90deg)  translateZ(100px); }
@@ -181,3 +182,81 @@ body::after {
 .sinistra { transform: rotateY(-90deg)  translateZ(100px); }
 .sopra    { transform: rotateX(90deg)   translateZ(100px); }
 .sotto    { transform: rotateX(-90deg)  translateZ(100px); }
+
+/* --- Contenuto facce --- */
+.faccia-contenuto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px;
+  width: 100%;
+  pointer-events: none; /* bloccato di default */
+}
+
+.faccia-titolo {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 2px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.campo {
+  width: 100%;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 0.7rem;
+  outline: none;
+}
+
+.campo::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+.btn-salva {
+  margin-top: 4px;
+  padding: 5px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.4);
+  background: rgba(123, 47, 247, 0.5);
+  color: white;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-salva:hover {
+  background: rgba(123, 47, 247, 0.8);
+}
+
+/* --- Lista contatti --- */
+.lista-contatti {
+  list-style: none;
+  width: 100%;
+  overflow-y: auto;
+  max-height: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 4px;
+}
+
+.lista-contatti li {
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: white;
+  font-size: 0.68rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.lista-contatti li:hover {
+  background: rgba(0, 198, 255, 0.25);
+}

@@ -9,10 +9,31 @@
 
   <div class="scena">
     <div class="cubo" id="cubo">
-      <div class="faccia fronte">FRONTE</div>
+        <div class="faccia fronte">
+          <div class="faccia-contenuto">
+          <h2 class="faccia-titolo">+ Contatto</h2>
+          <input class="campo" type="text" id="inp-nome"    placeholder="Nome"    maxlength="50">
+          <input class="campo" type="text" id="inp-cognome" placeholder="Cognome" maxlength="50">
+          <input class="campo" type="tel"      id="inp-tel"      placeholder="Telefono">
+          <input class="campo" type="email"    id="inp-email"    placeholder="Email">
+          <input class="campo" type="url"      id="inp-avatar"   placeholder="Avatar URL">
+          <button class="btn-salva" id="btn-salva">Salva</button>
+           </div>
+         </div>
       <div class="faccia dietro">DIETRO</div>
-      <div class="faccia destra">DESTRA</div>
-      <div class="faccia sinistra">SINISTRA</div>
+      <div class="faccia destra">
+  <div class="faccia-contenuto" id="lista-contenuto">
+    <h2 class="faccia-titolo">Contatti</h2>
+    <ul class="lista-contatti" id="lista-contatti"></ul>
+  </div>
+</div>
+      <div class="faccia sinistra">
+  <div class="faccia-contenuto" id="ricerca-contenuto">
+    <h2 class="faccia-titolo">Cerca</h2>
+    <input class="campo" type="text" id="inp-ricerca" placeholder="Nome o Cognome...">
+    <ul class="lista-contatti" id="lista-ricerca"></ul>
+  </div>
+</div>
       <div class="faccia sopra">SOPRA</div>
       <div class="faccia sotto">SOTTO</div>
     </div>
