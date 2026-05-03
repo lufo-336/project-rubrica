@@ -9,99 +9,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #0f0f0f;
-}
-
-/* La scena è il "mondo 3D" — qui si imposta la prospettiva */
-.scena {
-  width: 200px;
-  height: 200px;
-  perspective: 600px;
-}
-
-/* Il cubo è il contenitore delle 6 facce */
-.cubo {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-
-/* Ogni faccia è posizionata in 3D */
-.faccia {
-.faccia {
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  font-family: sans-serif;
-  font-weight: bold;
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.08);   /* ← quasi trasparente */
-  backdrop-filter: blur(12px);              /* ← effetto vetro smerigliato */
-  -webkit-backdrop-filter: blur(12px);      /* ← per Safari */
-  will-change: transform;
-  backface-visibility: hidden;
-}
-}
-
-/* Posizionamento delle 6 facce nello spazio 3D */
-.fronte   { background: rgba(123, 47, 247, 0.45); transform: translateZ(100px); }
-.dietro   { background: rgba(123, 47, 247, 0.45); transform: rotateY(180deg) translateZ(100px); }
-.destra   { background: rgba(0, 198, 255, 0.45);  transform: rotateY(90deg) translateZ(100px); }
-.sinistra { background: rgba(0, 198, 255, 0.45);  transform: rotateY(-90deg) translateZ(100px); }
-.sopra    { background: rgba(255,255,255,0.20);    transform: rotateX(90deg) translateZ(100px); }
-.sotto    { background: rgba(255,255,255,0.15);    transform: rotateX(-90deg) translateZ(100px); }
-
-/* Animazione di rotazione continua */
-@keyframes ruota {
-  from { transform: rotateX(-20deg) rotateY(0deg); }
-  to   { transform: rotateX(-20deg) rotateY(360deg); }
-}
-
-.controlli {
-  position: fixed;
-  bottom: 30px;
-  display: flex;
-  gap: 10px;
-}
-
-.controlli button {
-  padding: 8px 16px;
-  background: rgba(255,255,255,0.1);
-  color: white;
-  border: 1px solid rgba(255,255,255,0.3);
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.controlli button:hover {
-  background: rgba(255,255,255,0.25);
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  /* Sfondo gradiente colorato — il vetro ha bisogno di questo */
   background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  overflow: hidden;
 }
 
-/* Sfere colorate sullo sfondo per rendere il vetro più evidente */
 body::before {
   content: '';
   position: fixed;
@@ -112,7 +23,6 @@ body::before {
   left: -100px;
   z-index: 0;
 }
-
 body::after {
   content: '';
   position: fixed;
@@ -124,12 +34,23 @@ body::after {
   z-index: 0;
 }
 
+
+/* ================================================
+   SCENA E CUBO PRINCIPALE
+   ================================================ */
+
 .scena {
   width: 200px;
   height: 200px;
   perspective: 600px;
   position: relative;
-  z-index: 1;  /* sopra le sfere */
+  z-index: 1;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Si sposta a sinistra quando escono i mini-cubi */
+.scena.espansa {
+  transform: translateX(-160px);
 }
 
 .cubo {
@@ -140,6 +61,7 @@ body::after {
   will-change: transform;
 }
 
+/* Stile base facce */
 .faccia {
   position: absolute;
   width: 200px;
@@ -152,38 +74,26 @@ body::after {
   font-weight: bold;
   color: white;
   text-shadow: 0 1px 4px rgba(0,0,0,0.4);
-
-  background: rgba(255, 255, 255, 0.12);
-  /* backdrop-filter rimosso — causa il glitch tra facce */
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255,255,255,0.5);
   box-shadow:
-    0 0 20px rgba(255, 255, 255, 0.05),
-    inset 0 0 20px rgba(255, 255, 255, 0.05);
-
+    0 0 20px rgba(255,255,255,0.05),
+    inset 0 0 20px rgba(255,255,255,0.05);
   will-change: transform;
-  backface-visibility: hidden; /* ← va rimessa: nasconde le facce posteriori */
+  backface-visibility: hidden;
 }
 
-/* Colore diverso per ogni faccia — leggero tono di colore */
-.fronte   { background: rgba(123, 47, 247, 0.15); transform: translateZ(100px); }
-.dietro   { background: rgba(123, 47, 247, 0.15); transform: rotateY(180deg)  translateZ(100px); }
-.destra { 
-  background: rgba(0, 198, 255, 0.25); 
-  transform: rotateY(90deg) translateZ(100px); 
-}
-.sinistra { background: rgba(0, 198, 255, 0.15);  transform: rotateY(-90deg)  translateZ(100px); }
-.sopra    { background: rgba(255, 255, 255, 0.12); transform: rotateX(90deg)   translateZ(100px); }
-.sotto    { background: rgba(255, 255, 255, 0.10); transform: rotateX(-90deg)  translateZ(100px); }
+.fronte   { background: rgba(123, 47, 247, 0.45); transform: translateZ(100px); }
+.dietro   { background: rgba(123, 47, 247, 0.45); transform: rotateY(180deg)  translateZ(100px); }
+.destra   { background: rgba(0, 198, 255, 0.45);  transform: rotateY(90deg)   translateZ(100px); }
+.sinistra { background: rgba(0, 198, 255, 0.45);  transform: rotateY(-90deg)  translateZ(100px); }
+.sopra    { background: rgba(255,255,255,0.20);   transform: rotateX(90deg)   translateZ(100px); }
+.sotto    { background: rgba(255,255,255,0.15);   transform: rotateX(-90deg)  translateZ(100px); }
 
-/* Posizionamento 3D */
-.fronte   { transform: translateZ(100px); }
-.dietro   { transform: rotateY(180deg)  translateZ(100px); }
-.destra   { transform: rotateY(90deg)   translateZ(100px); }
-.sinistra { transform: rotateY(-90deg)  translateZ(100px); }
-.sopra    { transform: rotateX(90deg)   translateZ(100px); }
-.sotto    { transform: rotateX(-90deg)  translateZ(100px); }
 
-/* --- Contenuto facce --- */
+/* ================================================
+   CONTENUTO FACCE — stato A (form)
+   ================================================ */
+
 .faccia-contenuto {
   display: flex;
   flex-direction: column;
@@ -191,7 +101,7 @@ body::after {
   gap: 6px;
   padding: 12px;
   width: 100%;
-  pointer-events: none; /* bloccato di default */
+  pointer-events: none;
 }
 
 .faccia-titolo {
@@ -213,10 +123,7 @@ body::after {
   font-size: 0.7rem;
   outline: none;
 }
-
-.campo::placeholder {
-  color: rgba(255,255,255,0.5);
-}
+.campo::placeholder { color: rgba(255,255,255,0.5); }
 
 .btn-salva {
   margin-top: 4px;
@@ -229,12 +136,8 @@ body::after {
   cursor: pointer;
   transition: background 0.2s;
 }
+.btn-salva:hover { background: rgba(123, 47, 247, 0.8); }
 
-.btn-salva:hover {
-  background: rgba(123, 47, 247, 0.8);
-}
-
-/* --- Lista contatti --- */
 .lista-contatti {
   list-style: none;
   width: 100%;
@@ -245,7 +148,6 @@ body::after {
   gap: 4px;
   padding: 0 4px;
 }
-
 .lista-contatti li {
   padding: 5px 8px;
   border-radius: 6px;
@@ -256,7 +158,427 @@ body::after {
   cursor: pointer;
   transition: background 0.2s;
 }
+.lista-contatti li:hover { background: rgba(0, 198, 255, 0.25); }
 
-.lista-contatti li:hover {
-  background: rgba(0, 198, 255, 0.25);
+.logo-titolo {
+  font-size: 1rem;
+  color: white;
+  text-align: center;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.firma       { font-size: 0.6rem;  color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px; }
+.firma-nome  { font-size: 0.95rem; color: white; font-weight: bold; margin: 2px 0; }
+.firma-corso { font-size: 0.6rem;  color: rgba(255,255,255,0.7); }
+.firma-anno  { font-size: 0.55rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+.specchiato { transform: scaleX(-1); }
+
+
+/* ================================================
+   CONTENUTO FACCE — stato B (scheda contatto)
+   ================================================ */
+
+.nascosta { display: none !important; }
+
+.scheda {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+}
+
+.scheda-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 2px solid rgba(255,255,255,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: white;
+}
+.scheda-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.scheda-nome {
+  font-size: 0.78rem;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.3;
+}
+
+.scheda-label {
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.scheda-valore {
+  font-size: 0.75rem;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  word-break: break-all;
+}
+
+.avatar-sopra {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 2px solid rgba(255,255,255,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+}
+.avatar-sopra img { width: 100%; height: 100%; object-fit: cover; }
+
+.avatar-sotto {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 2px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: rgba(255,255,255,0.4);
+  transform: scaleY(-1);
+  opacity: 0.5;
+}
+.avatar-sotto img { width: 100%; height: 100%; object-fit: cover; }
+
+
+/* ================================================
+   PULSANTE ESCI — fisso in alto a destra,
+   sempre visibile durante la modalità contatto
+   ================================================ */
+
+.btn-esci-overlay {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  z-index: 100;
+  padding: 7px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.4);
+  background: rgba(255, 60, 60, 0.4);
+  color: white;
+  font-size: 0.78rem;
+  font-family: sans-serif;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.3s;
+  opacity: 0;
+  pointer-events: none;
+}
+.btn-esci-overlay.visibile {
+  opacity: 1;
+  pointer-events: auto;
+}
+.btn-esci-overlay:hover { background: rgba(255, 60, 60, 0.75); }
+
+
+/* ================================================
+   RIGA MINI-CUBI
+   ================================================ */
+
+.riga-mini {
+  position: fixed;
+  top: 50%;
+  /* Parte da destra del cubo (che si è spostato a sinistra) */
+  left: 50%;
+  transform: translateY(-50%) translateX(40px);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  padding: 30px 24px;
+  overflow-x: auto;
+  overflow-y: visible;
+  /* Larghezza massima: occupa la parte destra dello schermo */
+  max-width: calc(50vw + 60px);
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+  /* Scroll con momentum su trackpad/touch */
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+.riga-mini.visibile {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Frecce hint di scroll */
+.riga-mini::after {
+  content: '›';
+  position: sticky;
+  right: 0;
+  font-size: 1.5rem;
+  color: rgba(255,255,255,0.3);
+  align-self: center;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.riga-mini::-webkit-scrollbar { height: 6px; }
+.riga-mini::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 3px; }
+.riga-mini::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 3px; }
+
+
+/* ================================================
+   MINI-CUBO
+   ================================================ */
+
+.mini-scena {
+  width: 80px;
+  height: 80px;
+  perspective: 260px;
+  flex-shrink: 0;
+  cursor: pointer;
+  /* Spazio extra sopra/sotto per non tagliare l'effetto 3D */
+  margin: 20px 0;
+}
+
+.mini-cubo {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(-15deg) rotateY(25deg);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+@keyframes emergi {
+  from {
+    opacity: 0;
+    transform: rotateX(-15deg) rotateY(25deg) scale(0.05);
+  }
+  to {
+    opacity: 1;
+    transform: rotateX(-15deg) rotateY(25deg) scale(1);
+  }
+}
+
+.mini-cubo.entrata {
+  animation: emergi 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
+}
+
+.mini-scena:not(.selezionato):hover .mini-cubo {
+  transform: rotateX(-15deg) rotateY(25deg) scale(1.12);
+}
+
+
+/* ================================================
+   MINI-CUBO IN FOCUS — overlay al centro schermo
+   ================================================ */
+
+/* Quando un mini-cubo è selezionato, lo cloniamo
+   visivamente con un overlay fisso */
+.mini-focus-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Sfondo semi-trasparente per isolare il cubo */
+  background: rgba(15, 12, 41, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.mini-focus-overlay.visibile {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* La scena del mini-cubo ingrandito nell'overlay */
+.mini-focus-scena {
+  width: 160px;
+  height: 160px;
+  perspective: 500px;
+  cursor: grab;
+}
+.mini-focus-scena:active { cursor: grabbing; }
+
+.mini-focus-cubo {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(-15deg) rotateY(25deg);
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
+
+/* Hint "ESC per chiudere" nell'overlay */
+.mini-focus-hint {
+  position: absolute;
+  bottom: 24px;
+  font-size: 0.62rem;
+  color: rgba(255,255,255,0.35);
+  font-family: sans-serif;
+  letter-spacing: 1px;
+  pointer-events: none;
+}
+
+/* Facce del mini-cubo (sia nella riga che nell'overlay) */
+.mf {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.45);
+  backface-visibility: hidden;
+  font-family: sans-serif;
+  color: white;
+  padding: 6px;
+}
+
+/* Dimensioni facce nella riga: 80x80, profondità 40px */
+.mini-scena .mf {
+  width: 80px;
+  height: 80px;
+}
+.mini-scena .mf-fronte   { background: rgba(123, 47, 247, 0.55); transform: translateZ(40px);              flex-direction: column; gap: 3px; }
+.mini-scena .mf-dietro   { background: rgba(123, 47, 247, 0.55); transform: rotateY(180deg) translateZ(40px); flex-direction: column; gap: 3px; }
+.mini-scena .mf-destra   { background: rgba(0, 198, 255, 0.40);  transform: rotateY(90deg)  translateZ(40px); flex-direction: column; gap: 2px; }
+.mini-scena .mf-sinistra { background: rgba(0, 198, 255, 0.40);  transform: rotateY(-90deg) translateZ(40px); flex-direction: column; gap: 2px; }
+.mini-scena .mf-sopra    { background: rgba(255,255,255,0.15);   transform: rotateX(90deg)  translateZ(40px); }
+.mini-scena .mf-sotto    { background: rgba(255,255,255,0.08);   transform: rotateX(-90deg) translateZ(40px); }
+
+/* Dimensioni facce nell'overlay: 160x160, profondità 80px */
+.mini-focus-cubo .mf {
+  width: 160px;
+  height: 160px;
+}
+.mini-focus-cubo .mf-fronte   { background: rgba(123, 47, 247, 0.55); transform: translateZ(80px);               flex-direction: column; gap: 6px; }
+.mini-focus-cubo .mf-dietro   { background: rgba(123, 47, 247, 0.55); transform: rotateY(180deg) translateZ(80px);  flex-direction: column; gap: 6px; }
+.mini-focus-cubo .mf-destra   { background: rgba(0, 198, 255, 0.40);  transform: rotateY(90deg)  translateZ(80px);  flex-direction: column; gap: 4px; }
+.mini-focus-cubo .mf-sinistra { background: rgba(0, 198, 255, 0.40);  transform: rotateY(-90deg) translateZ(80px);  flex-direction: column; gap: 4px; }
+.mini-focus-cubo .mf-sopra    { background: rgba(255,255,255,0.15);   transform: rotateX(90deg)  translateZ(80px); }
+.mini-focus-cubo .mf-sotto    { background: rgba(255,255,255,0.08);   transform: rotateX(-90deg) translateZ(80px); }
+
+/* Testi sulle facce */
+.mf-nome {
+  font-size: 0.55rem;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  line-height: 1.3;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+.mini-focus-cubo .mf-nome { font-size: 0.9rem; }
+
+.mf-label {
+  font-size: 0.42rem;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.mini-focus-cubo .mf-label { font-size: 0.65rem; }
+
+.mf-valore {
+  font-size: 0.48rem;
+  color: white;
+  text-align: center;
+  word-break: break-all;
+  line-height: 1.3;
+}
+.mini-focus-cubo .mf-valore { font-size: 0.78rem; }
+
+/* Avatar */
+.mf-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: white;
+}
+.mf-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.mini-focus-cubo .mf-avatar {
+  width: 72px;
+  height: 72px;
+  font-size: 1.6rem;
+}
+
+.mf-avatar-specchio {
+  transform: scaleY(-1);
+  opacity: 0.4;
+}
+
+/* ================================================
+   OVERRIDE Strato 4 fix-3:
+   La riga è centrata a schermo (il cubo è nascosto)
+   ================================================ */
+
+.riga-mini {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 90vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  /* Padding verticale generoso: il cubo ingrandito si solleva di ~70px
+     e scala 2.2x (80px → 176px), quindi serve spazio sopra e sotto */
+  padding: 130px 40px 60px 40px;
+  overflow-x: auto;
+  /* overflow-y DEVE essere visible altrimenti taglia i cubi sollevati.
+     Il browser però non permette overflow-x:auto con overflow-y:visible
+     sullo stesso elemento — usiamo clip invece di hidden */
+  overflow-y: clip;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.riga-mini.visibile {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.riga-mini::-webkit-scrollbar { height: 6px; }
+.riga-mini::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 3px; }
+.riga-mini::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 3px; }
+
+/* Il mini-cubo selezionato sale sopra gli altri */
+.mini-scena {
+  position: relative;   /* necessario per z-index */
 }
