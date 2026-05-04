@@ -1,3 +1,13 @@
+/* ============================================================
+   RUBRICA CUBO — style.css  |  Strato 7 (fix taglio)
+   ITS Piazza dei Mestieri · Torino · Corso WSA · 2026
+============================================================ */
+
+
+/* ============================================================
+   RESET E BASE
+============================================================ */
+
 * {
   margin: 0;
   padding: 0;
@@ -35,9 +45,9 @@ body::after {
 }
 
 
-/* ================================================
+/* ============================================================
    SCENA E CUBO PRINCIPALE
-   ================================================ */
+============================================================ */
 
 .scena {
   width: 200px;
@@ -48,11 +58,6 @@ body::after {
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Si sposta a sinistra quando escono i mini-cubi */
-.scena.espansa {
-  transform: translateX(-160px);
-}
-
 .cubo {
   width: 100%;
   height: 100%;
@@ -61,7 +66,6 @@ body::after {
   will-change: transform;
 }
 
-/* Stile base facce */
 .faccia {
   position: absolute;
   width: 200px;
@@ -90,9 +94,9 @@ body::after {
 .sotto    { background: rgba(255,255,255,0.15);   transform: rotateX(-90deg)  translateZ(100px); }
 
 
-/* ================================================
-   CONTENUTO FACCE — stato A (form)
-   ================================================ */
+/* ============================================================
+   CONTENUTO FACCE
+============================================================ */
 
 .faccia-contenuto {
   display: flex;
@@ -174,103 +178,12 @@ body::after {
 .firma-anno  { font-size: 0.55rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
 
 .specchiato { transform: scaleX(-1); }
+.nascosta   { display: none !important; }
 
 
-/* ================================================
-   CONTENUTO FACCE — stato B (scheda contatto)
-   ================================================ */
-
-.nascosta { display: none !important; }
-
-.scheda {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 12px;
-}
-
-.scheda-avatar {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-  border: 2px solid rgba(255,255,255,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: white;
-}
-.scheda-avatar img { width: 100%; height: 100%; object-fit: cover; }
-
-.scheda-nome {
-  font-size: 0.78rem;
-  font-weight: bold;
-  color: white;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  line-height: 1.3;
-}
-
-.scheda-label {
-  font-size: 0.65rem;
-  color: rgba(255,255,255,0.6);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-.scheda-valore {
-  font-size: 0.75rem;
-  color: white;
-  font-weight: bold;
-  text-align: center;
-  word-break: break-all;
-}
-
-.avatar-sopra {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-  border: 2px solid rgba(255,255,255,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: white;
-}
-.avatar-sopra img { width: 100%; height: 100%; object-fit: cover; }
-
-.avatar-sotto {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-  border: 2px solid rgba(255,255,255,0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: rgba(255,255,255,0.4);
-  transform: scaleY(-1);
-  opacity: 0.5;
-}
-.avatar-sotto img { width: 100%; height: 100%; object-fit: cover; }
-
-
-/* ================================================
-   PULSANTE ESCI — fisso in alto a destra,
-   sempre visibile durante la modalità contatto
-   ================================================ */
+/* ============================================================
+   PULSANTE ESCI
+============================================================ */
 
 .btn-esci-overlay {
   position: fixed;
@@ -289,66 +202,119 @@ body::after {
   opacity: 0;
   pointer-events: none;
 }
-.btn-esci-overlay.visibile {
-  opacity: 1;
-  pointer-events: auto;
-}
+.btn-esci-overlay.visibile { opacity: 1; pointer-events: auto; }
 .btn-esci-overlay:hover { background: rgba(255, 60, 60, 0.75); }
 
 
-/* ================================================
-   RIGA MINI-CUBI
-   ================================================ */
+/* ============================================================
+   PULSANTE ELIMINA
+============================================================ */
+
+#btn-elimina {
+  position: fixed;
+  top: 20px;
+  right: 120px;
+  z-index: 100;
+  padding: 7px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 100, 100, 0.5);
+  background: rgba(220, 50, 50, 0.75);
+  color: white;
+  font-size: 0.78rem;
+  font-family: sans-serif;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.3s;
+  opacity: 0;
+  pointer-events: none;
+}
+#btn-elimina.visibile { opacity: 1; pointer-events: auto; }
+#btn-elimina:hover { background: rgba(220, 50, 50, 1); }
+
+
+/* ============================================================
+   HUB MINI-CUBI
+
+   Struttura a 2 livelli:
+   - .riga-mini (esterno): wrapper a schermo intero, centra
+     verticalmente la riga di scroll. Nessun overflow.
+   - .riga-mini-scroll (interno): flex row con overflow-x:auto.
+     Contiene i mini-cubi NON selezionati.
+
+   IMPORTANTE: i cubi qui dentro non si sollevano mai.
+   Quando si seleziona un cubo, il JS lo SPOSTA dentro
+   #overlay-mini (fuori da questa struttura), quindi nessun
+   contenitore con overflow lo può mai tagliare.
+============================================================ */
 
 .riga-mini {
   position: fixed;
-  top: 50%;
-  /* Parte da destra del cubo (che si è spostato a sinistra) */
-  left: 50%;
-  transform: translateY(-50%) translateX(40px);
+  inset: 0;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 20px;
-  padding: 30px 24px;
-  overflow-x: auto;
-  overflow-y: visible;
-  /* Larghezza massima: occupa la parte destra dello schermo */
-  max-width: calc(50vw + 60px);
+  justify-content: center;
   z-index: 5;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.6s ease;
-  /* Scroll con momentum su trackpad/touch */
+}
+.riga-mini.visibile { opacity: 1; pointer-events: auto; }
+
+.riga-mini-scroll {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  padding: 40px;
+  max-width: 100vw;
+  overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
 }
 
-.riga-mini.visibile {
-  opacity: 1;
-  pointer-events: auto;
-}
+.riga-mini-scroll::-webkit-scrollbar { height: 6px; }
+.riga-mini-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 3px; }
+.riga-mini-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 3px; }
 
-/* Frecce hint di scroll */
-.riga-mini::after {
-  content: '›';
-  position: sticky;
-  right: 0;
-  font-size: 1.5rem;
-  color: rgba(255,255,255,0.3);
-  align-self: center;
-  flex-shrink: 0;
+
+/* ============================================================
+   OVERLAY MINI-CUBO SELEZIONATO
+
+   Questo contenitore è la chiave del fix.
+   - position:fixed, copre tutto lo schermo
+   - centra il cubo selezionato a metà viewport
+   - z-index alto (sopra la riga-mini)
+   - NESSUN overflow dichiarato, NESSUN antenato con overflow:
+     è figlio diretto del body, che a sua volta non ha antenati.
+
+   Quando un cubo è qui dentro, ha tutto lo spazio del mondo
+   per ingrandirsi senza essere tagliato.
+============================================================ */
+
+.overlay-mini {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
   pointer-events: none;
 }
 
-.riga-mini::-webkit-scrollbar { height: 6px; }
-.riga-mini::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 3px; }
-.riga-mini::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 3px; }
+/* Quando l'overlay contiene un cubo, abilita i click sul cubo
+   ma NON sullo sfondo (per non bloccare la riga sotto se serve). */
+.overlay-mini > .mini-scena {
+  pointer-events: auto;
+}
 
 
-/* ================================================
-   MINI-CUBO
-   ================================================ */
+/* ============================================================
+   MINI-SCENA E MINI-CUBO
+
+   Stato base: 80x80px nella riga.
+   Quando viene messo nell'overlay, riceve la classe
+   .in-overlay che applica scale(2.5) — niente translateY
+   serve, è già al centro dello schermo grazie all'overlay.
+============================================================ */
 
 .mini-scena {
   width: 80px;
@@ -356,8 +322,30 @@ body::after {
   perspective: 260px;
   flex-shrink: 0;
   cursor: pointer;
-  /* Spazio extra sopra/sotto per non tagliare l'effetto 3D */
-  margin: 20px 0;
+  position: relative;
+  transition: transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+/* Stato del cubo nell'overlay: ingrandito al centro dello schermo.
+   Lo scale viene applicato sulla mini-scena intera (non sul
+   .mini-cubo) per preservare la prospettiva — altrimenti il cubo
+   diventa un parallelepipedo. */
+.mini-scena.in-overlay {
+  transform: scale(2.5);
+  cursor: grab;
+}
+.mini-scena.in-overlay:active {
+  cursor: grabbing;
+}
+
+/* Placeholder lasciato nella riga al posto del cubo selezionato.
+   Stesse dimensioni del cubo originale, invisibile, mantiene il
+   layout della riga intatto durante la selezione. */
+.mini-placeholder {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  visibility: hidden;
 }
 
 .mini-cubo {
@@ -385,68 +373,20 @@ body::after {
   animation: emergi 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
 }
 
-.mini-scena:not(.selezionato):hover .mini-cubo {
+/* Hover: leggero ingrandimento solo nella riga, non in overlay */
+.mini-scena:not(.in-overlay):hover .mini-cubo {
   transform: rotateX(-15deg) rotateY(25deg) scale(1.12);
 }
 
 
-/* ================================================
-   MINI-CUBO IN FOCUS — overlay al centro schermo
-   ================================================ */
+/* ============================================================
+   FACCE DEI MINI-CUBI
+============================================================ */
 
-/* Quando un mini-cubo è selezionato, lo cloniamo
-   visivamente con un overlay fisso */
-.mini-focus-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* Sfondo semi-trasparente per isolare il cubo */
-  background: rgba(15, 12, 41, 0.6);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-.mini-focus-overlay.visibile {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* La scena del mini-cubo ingrandito nell'overlay */
-.mini-focus-scena {
-  width: 160px;
-  height: 160px;
-  perspective: 500px;
-  cursor: grab;
-}
-.mini-focus-scena:active { cursor: grabbing; }
-
-.mini-focus-cubo {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  transform: rotateX(-15deg) rotateY(25deg);
-  transition: transform 0.3s ease;
-  will-change: transform;
-}
-
-/* Hint "ESC per chiudere" nell'overlay */
-.mini-focus-hint {
-  position: absolute;
-  bottom: 24px;
-  font-size: 0.62rem;
-  color: rgba(255,255,255,0.35);
-  font-family: sans-serif;
-  letter-spacing: 1px;
-  pointer-events: none;
-}
-
-/* Facce del mini-cubo (sia nella riga che nell'overlay) */
 .mf {
   position: absolute;
+  width: 80px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -457,31 +397,18 @@ body::after {
   padding: 6px;
 }
 
-/* Dimensioni facce nella riga: 80x80, profondità 40px */
-.mini-scena .mf {
-  width: 80px;
-  height: 80px;
-}
-.mini-scena .mf-fronte   { background: rgba(123, 47, 247, 0.55); transform: translateZ(40px);              flex-direction: column; gap: 3px; }
-.mini-scena .mf-dietro   { background: rgba(123, 47, 247, 0.55); transform: rotateY(180deg) translateZ(40px); flex-direction: column; gap: 3px; }
-.mini-scena .mf-destra   { background: rgba(0, 198, 255, 0.40);  transform: rotateY(90deg)  translateZ(40px); flex-direction: column; gap: 2px; }
-.mini-scena .mf-sinistra { background: rgba(0, 198, 255, 0.40);  transform: rotateY(-90deg) translateZ(40px); flex-direction: column; gap: 2px; }
-.mini-scena .mf-sopra    { background: rgba(255,255,255,0.15);   transform: rotateX(90deg)  translateZ(40px); }
-.mini-scena .mf-sotto    { background: rgba(255,255,255,0.08);   transform: rotateX(-90deg) translateZ(40px); }
+.mf-fronte   { background: rgba(123, 47, 247, 0.55); transform: translateZ(40px);                 flex-direction: column; gap: 3px; }
+.mf-dietro   { background: rgba(123, 47, 247, 0.55); transform: rotateY(180deg) translateZ(40px); flex-direction: column; gap: 3px; }
+.mf-destra   { background: rgba(0, 198, 255, 0.40);  transform: rotateY(90deg)  translateZ(40px); flex-direction: column; gap: 2px; }
+.mf-sinistra { background: rgba(0, 198, 255, 0.40);  transform: rotateY(-90deg) translateZ(40px); flex-direction: column; gap: 2px; }
+.mf-sopra    { background: rgba(255,255,255,0.15);   transform: rotateX(90deg)  translateZ(40px); }
+.mf-sotto    { background: rgba(255,255,255,0.08);   transform: rotateX(-90deg) translateZ(40px); }
 
-/* Dimensioni facce nell'overlay: 160x160, profondità 80px */
-.mini-focus-cubo .mf {
-  width: 160px;
-  height: 160px;
-}
-.mini-focus-cubo .mf-fronte   { background: rgba(123, 47, 247, 0.55); transform: translateZ(80px);               flex-direction: column; gap: 6px; }
-.mini-focus-cubo .mf-dietro   { background: rgba(123, 47, 247, 0.55); transform: rotateY(180deg) translateZ(80px);  flex-direction: column; gap: 6px; }
-.mini-focus-cubo .mf-destra   { background: rgba(0, 198, 255, 0.40);  transform: rotateY(90deg)  translateZ(80px);  flex-direction: column; gap: 4px; }
-.mini-focus-cubo .mf-sinistra { background: rgba(0, 198, 255, 0.40);  transform: rotateY(-90deg) translateZ(80px);  flex-direction: column; gap: 4px; }
-.mini-focus-cubo .mf-sopra    { background: rgba(255,255,255,0.15);   transform: rotateX(90deg)  translateZ(80px); }
-.mini-focus-cubo .mf-sotto    { background: rgba(255,255,255,0.08);   transform: rotateX(-90deg) translateZ(80px); }
 
-/* Testi sulle facce */
+/* ============================================================
+   TESTI E AVATAR
+============================================================ */
+
 .mf-nome {
   font-size: 0.55rem;
   font-weight: bold;
@@ -491,7 +418,6 @@ body::after {
   line-height: 1.3;
   text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
-.mini-focus-cubo .mf-nome { font-size: 0.9rem; }
 
 .mf-label {
   font-size: 0.42rem;
@@ -499,7 +425,6 @@ body::after {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-.mini-focus-cubo .mf-label { font-size: 0.65rem; }
 
 .mf-valore {
   font-size: 0.48rem;
@@ -508,9 +433,7 @@ body::after {
   word-break: break-all;
   line-height: 1.3;
 }
-.mini-focus-cubo .mf-valore { font-size: 0.78rem; }
 
-/* Avatar */
 .mf-avatar {
   width: 36px;
   height: 36px;
@@ -527,58 +450,7 @@ body::after {
 }
 .mf-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-.mini-focus-cubo .mf-avatar {
-  width: 72px;
-  height: 72px;
-  font-size: 1.6rem;
-}
-
 .mf-avatar-specchio {
   transform: scaleY(-1);
   opacity: 0.4;
-}
-
-/* ================================================
-   OVERRIDE Strato 4 fix-3:
-   La riga è centrata a schermo (il cubo è nascosto)
-   ================================================ */
-
-.riga-mini {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 90vw;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 20px;
-  /* Padding verticale generoso: il cubo ingrandito si solleva di ~70px
-     e scala 2.2x (80px → 176px), quindi serve spazio sopra e sotto */
-  padding: 130px 40px 60px 40px;
-  overflow-x: auto;
-  /* overflow-y DEVE essere visible altrimenti taglia i cubi sollevati.
-     Il browser però non permette overflow-x:auto con overflow-y:visible
-     sullo stesso elemento — usiamo clip invece di hidden */
-  overflow-y: clip;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-  z-index: 5;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.6s ease;
-}
-
-.riga-mini.visibile {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.riga-mini::-webkit-scrollbar { height: 6px; }
-.riga-mini::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 3px; }
-.riga-mini::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 3px; }
-
-/* Il mini-cubo selezionato sale sopra gli altri */
-.mini-scena {
-  position: relative;   /* necessario per z-index */
 }

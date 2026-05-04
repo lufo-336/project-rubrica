@@ -7,58 +7,36 @@
 </head>
 <body>
 
-  <!-- ================================================
-       SCENA PRINCIPALE — il cubo
-       ================================================ -->
+  <!-- ============================================================
+       SCENA PRINCIPALE — contiene il cubo 3D.
+       Viene nascosta (display:none) quando si apre l'hub.
+  ============================================================ -->
   <div class="scena" id="scena">
     <div class="cubo" id="cubo">
 
-      <!-- FRONTE: form aggiungi contatto / dati contatto -->
+      <!-- FRONTE: form aggiungi contatto -->
       <div class="faccia fronte" id="faccia-fronte">
         <div class="faccia-contenuto" id="contenuto-fronte">
-
-          <!-- Stato A: form (default) -->
-          <div id="form-aggiungi">
-            <h2 class="faccia-titolo">+ Contatto</h2>
-            <input class="campo" type="text"  id="inp-nome"    placeholder="Nome"     maxlength="50">
-            <input class="campo" type="text"  id="inp-cognome" placeholder="Cognome"  maxlength="50">
-            <input class="campo" type="tel"   id="inp-tel"     placeholder="Telefono">
-            <input class="campo" type="email" id="inp-email"   placeholder="Email">
-            <input class="campo" type="url"   id="inp-avatar"  placeholder="Avatar URL">
-            <button class="btn-salva" id="btn-salva">Salva</button>
-          </div>
-
-          <!-- Stato B: dati contatto (visibile durante modalità contatto) -->
-          <div id="scheda-fronte" class="scheda nascosta">
-            <div class="scheda-avatar" id="scheda-avatar-fronte"></div>
-            <p class="scheda-nome" id="scheda-nome-fronte"></p>
-            <button class="btn-esci" id="btn-esci">✕ Esci</button>
-          </div>
-
+          <h2 class="faccia-titolo">+ Contatto</h2>
+          <input class="campo" type="text"  id="inp-nome"    placeholder="Nome"     maxlength="50">
+          <input class="campo" type="text"  id="inp-cognome" placeholder="Cognome"  maxlength="50">
+          <input class="campo" type="tel"   id="inp-tel"     placeholder="Telefono">
+          <input class="campo" type="email" id="inp-email"   placeholder="Email">
+          <input class="campo" type="url"   id="inp-avatar"  placeholder="Avatar URL">
+          <button class="btn-salva" id="btn-salva">Salva</button>
         </div>
       </div>
 
-      <!-- DIETRO: form specchiato / fronte specchiato del contatto -->
+      <!-- DIETRO: form specchiato -->
       <div class="faccia dietro" id="faccia-dietro">
         <div class="faccia-contenuto specchiato" id="contenuto-dietro">
-
-          <!-- Stato A: form specchiato (default) -->
-          <div id="form-aggiungi-b">
-            <h2 class="faccia-titolo">+ Contatto</h2>
-            <input class="campo" type="text"  id="inp-nome-b"    placeholder="Nome"     maxlength="50">
-            <input class="campo" type="text"  id="inp-cognome-b" placeholder="Cognome"  maxlength="50">
-            <input class="campo" type="tel"   id="inp-tel-b"     placeholder="Telefono">
-            <input class="campo" type="email" id="inp-email-b"   placeholder="Email">
-            <input class="campo" type="url"   id="inp-avatar-b"  placeholder="Avatar URL">
-            <button class="btn-salva" id="btn-salva-b">Salva</button>
-          </div>
-
-          <!-- Stato B: riflesso specchiato del fronte -->
-          <div id="scheda-dietro" class="scheda nascosta">
-            <div class="scheda-avatar" id="scheda-avatar-dietro"></div>
-            <p class="scheda-nome" id="scheda-nome-dietro"></p>
-          </div>
-
+          <h2 class="faccia-titolo">+ Contatto</h2>
+          <input class="campo" type="text"  id="inp-nome-b"    placeholder="Nome"     maxlength="50">
+          <input class="campo" type="text"  id="inp-cognome-b" placeholder="Cognome"  maxlength="50">
+          <input class="campo" type="tel"   id="inp-tel-b"     placeholder="Telefono">
+          <input class="campo" type="email" id="inp-email-b"   placeholder="Email">
+          <input class="campo" type="url"   id="inp-avatar-b"  placeholder="Avatar URL">
+          <button class="btn-salva" id="btn-salva-b">Salva</button>
         </div>
       </div>
 
@@ -70,34 +48,23 @@
         </div>
       </div>
 
-      <!-- SINISTRA: cerca / telefono contatto -->
+      <!-- SINISTRA: ricerca contatti -->
       <div class="faccia sinistra" id="faccia-sinistra">
         <div class="faccia-contenuto" id="contenuto-sinistra">
-
-          <!-- Stato A: ricerca (default) -->
-          <div id="form-ricerca">
-            <h2 class="faccia-titolo">Cerca</h2>
-            <input class="campo" type="text" id="inp-ricerca" placeholder="Nome o Cognome...">
-            <ul class="lista-contatti" id="lista-ricerca"></ul>
-          </div>
-
-          <!-- Stato B: telefono contatto -->
-          <div id="scheda-sinistra" class="scheda nascosta">
-            <p class="scheda-label">📞 Telefono</p>
-            <p class="scheda-valore" id="scheda-tel"></p>
-          </div>
-
+          <h2 class="faccia-titolo">Cerca</h2>
+          <input class="campo" type="text" id="inp-ricerca" placeholder="Nome o Cognome...">
+          <ul class="lista-contatti" id="lista-ricerca"></ul>
         </div>
       </div>
 
-      <!-- SOPRA: logo / avatar contatto -->
+      <!-- SOPRA: logo -->
       <div class="faccia sopra" id="faccia-sopra">
         <div class="faccia-contenuto" id="contenuto-sopra">
           <h1 class="logo-titolo">📒 Rubrica</h1>
         </div>
       </div>
 
-      <!-- SOTTO: firma / avatar specchiato contatto -->
+      <!-- SOTTO: firma -->
       <div class="faccia sotto" id="faccia-sotto">
         <div class="faccia-contenuto" id="contenuto-sotto">
           <p class="firma">Developed by</p>
@@ -107,15 +74,39 @@
         </div>
       </div>
 
-    </div><!-- fine .cubo -->
-  </div><!-- fine .scena -->
+    </div>
+  </div>
 
 
-  <!-- ================================================
-       RIGA MINI-CUBI — appare dopo l'esplosione
-       Vive fuori dalla scena per evitare distorsioni
-       ================================================ -->
-  <div class="riga-mini" id="riga-mini"></div>
+  <!-- ============================================================
+       HUB MINI-CUBI
+
+       Struttura a 2 livelli:
+       - .riga-mini (esterno): position:fixed, copre tutto il viewport,
+         centra il contenuto. È un wrapper di posizionamento.
+       - .riga-mini-scroll (interno): flex row con overflow-x:auto.
+         Contiene tutti i mini-cubi quando NON sono selezionati.
+
+       Il problema del taglio verticale viene risolto NON gestendo
+       l'ingrandimento qui dentro: quando si seleziona un mini-cubo,
+       il JS sposta il cubo selezionato dentro #overlay-mini (sotto).
+  ============================================================ -->
+  <div class="riga-mini" id="riga-mini">
+    <div class="riga-mini-scroll" id="riga-mini-scroll"></div>
+  </div>
+
+
+  <!-- ============================================================
+       OVERLAY MINI-CUBO SELEZIONATO
+
+       Contenitore separato, fratello diretto del body.
+       È position:fixed, non ha NESSUN antenato con overflow.
+       Quando un mini-cubo viene selezionato, il JS lo sposta qui
+       dentro (e ne mette un placeholder al suo posto nella riga).
+       Risultato: il cubo ingrandito non viene MAI tagliato perché
+       non vive più dentro il contenitore con overflow-x: auto.
+  ============================================================ -->
+  <div class="overlay-mini" id="overlay-mini"></div>
 
 
   <script src="../JS/script.js"></script>
